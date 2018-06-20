@@ -24,7 +24,35 @@ func main() {
 
 	client := getClient(config)
 	srv, err := photoslibrary.New(client)
-	_ = srv
+
+	var dates []*photoslibrary.Date
+	date := &photoslibrary.Date{
+		Day:   11,
+		Month: 06,
+		Year:  2018,}
+
+	// create filter
+	dates = append(dates, date)
+	datefilter := &photoslibrary.DateFilter{Dates: dates}
+
+	categoryList := []string{"Food"}
+	contentFilter := &photoslibrary.ContentFilter{IncludedContentCategories: categoryList}
+
+	filter := &photoslibrary.Filters{
+		DateFilter: datefilter,
+		ContentFilter: contentFilter}
+
+	// create request
+	req := &photoslibrary.SearchMediaItemsRequest{Filters: filter}
+	caller := srv.MediaItems.Search(req)
+	resp, err := caller.Do()
+
+	if err != nil {
+		log.Fatalf("Unable to call media items search: %v", err)
+	}
+	for key, value := range resp.MediaItems {
+		log.Println(key, value);
+	}
 
 }
 

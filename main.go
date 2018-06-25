@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"encoding/json"
+	"time"
 )
 
 func main() {
@@ -25,11 +26,15 @@ func main() {
 	client := getClient(config)
 	srv, err := photoslibrary.New(client)
 
+	d := time.Now()
+	year, month, day := d.Date()
+
 	var dates []*photoslibrary.Date
 	date := &photoslibrary.Date{
-		Day:   11,
-		Month: 06,
-		Year:  2018,}
+		Day:   int64(day),
+		Month: int64(month),
+		Year:  int64(year),
+	}
 
 	// create filter
 	dates = append(dates, date)
